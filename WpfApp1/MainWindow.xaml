@@ -5,24 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="https://ss.sport-express.net/userfiles/materials/196/1960277/large.jpg" />
         </Grid.Background>
         <StackPanel Orientation="Vertical" Margin="20">
-            <TextBlock Text="Логин" />
+            <TextBlock Text="Логин" Foreground="White" />
             <TextBox x:Name="loginTextBox" Text="{Binding Username, Mode=TwoWay}" />
-            <TextBlock Text="Пароль" />
+            <TextBlock Text="Пароль" Foreground="White" />
             <TextBox x:Name="passwordTextBox" Text="{Binding Password, Mode=OneWayToSource}" />
-            <!--<Button Command="{Binding LoginCommand, Mode=OneTime}" Content="Войти" Background="#4CAF50" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
-            <Button Command="{Binding ReCreateDBCommand, Mode=OneTime}" Content="Сбросить базу данных" Background="#F44336" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" /> -->
             <Button x:Name="AuthButton" Click="AuthButton_Click" Content="Войти" Background="#4CAF50" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
             <Button x:Name="RefillButton" Click="RefillButton_Click" Content="Сбросить базу данных" Background="#F44336" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
-
-
+            <TextBlock Text="SQL Запрос" Margin="0,10,0,0" Foreground="White"/>
+            <TextBox x:Name="sqlQueryTextBox" Height="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,5,0,0" />
+            <Button x:Name="ExecuteQueryButton" Click="ExecuteQueryButton_Click" Content="Выполнить запрос" Background="#2196F3" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
+            <TextBlock Text="Результаты запроса" Margin="0,10,0,0" Foreground="White"/>
+            <DataGrid x:Name="resultDataGrid" AutoGenerateColumns="True" Height="200" Margin="0,5,0,0" IsReadOnly="True" />
         </StackPanel>
     </Grid>
-
-
 </Window>

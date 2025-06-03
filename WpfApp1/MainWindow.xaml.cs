@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Data;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,7 +24,7 @@ namespace WpfApp1
         {
             InitializeComponent();
 
-            _connection = new MySqlConnection("Server=localhost;User ID=root;Password=student;Database=demoapp");
+            _connection = new MySqlConnection("Server=localhost;User ID=root;Password=student;Database=hotel");
             _connection.Open();
 
         }
@@ -81,6 +82,39 @@ namespace WpfApp1
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при заполнении базы: {ex.Message}");
+            }
+        }
+
+        public void ExecuteQueryButton_Click(object sender, RoutedEventArgs e)
+        {
+            string query = sqlQueryTextBox.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                MessageBox.Show("Введите SQL запрос!", "Ошибка");
+                return;
+            }
+
+            try
+            {
+                var command = _connection.CreateCommand();
+                command.CommandText = query;
+
+                // Use DataTable to store query results
+                using (var adapter = new MySqlDataAdapter(command))
+                {
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                    // Bind the DataTable to the DataGrid
+                    resultDataGrid.ItemsSource = dataTable.DefaultView;
+
+                    MessageBox.Show($"Запрос выполнен успешно. Найдено строк: {dataTable.Rows.Count}", "Успех");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при выполнении запроса: {ex.Message}", "Ошибка");
             }
         }
     }
