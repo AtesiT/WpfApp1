@@ -3,25 +3,73 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="Hotel Management System" Height="700" Width="900">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="https://ss.sport-express.net/userfiles/materials/196/1960277/large.jpg" />
         </Grid.Background>
-        <StackPanel Orientation="Vertical" Margin="20">
-            <TextBlock Text="Логин" Foreground="White" />
-            <TextBox x:Name="loginTextBox" Text="{Binding Username, Mode=TwoWay}" />
-            <TextBlock Text="Пароль" Foreground="White" />
-            <TextBox x:Name="passwordTextBox" Text="{Binding Password, Mode=OneWayToSource}" />
-            <Button x:Name="AuthButton" Click="AuthButton_Click" Content="Войти" Background="#4CAF50" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
-            <Button x:Name="RefillButton" Click="RefillButton_Click" Content="Сбросить базу данных" Background="#F44336" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
-            <TextBlock Text="SQL Запрос" Margin="0,10,0,0" Foreground="White"/>
-            <TextBox x:Name="sqlQueryTextBox" Height="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,5,0,0" />
-            <Button x:Name="ExecuteQueryButton" Click="ExecuteQueryButton_Click" Content="Выполнить запрос" Background="#2196F3" Foreground="White" Margin="0,10,0,0" Width="200" Height="50" />
-            <TextBlock Text="Результаты запроса" Margin="0,10,0,0" Foreground="White"/>
-            <DataGrid x:Name="resultDataGrid" AutoGenerateColumns="True" Height="200" Margin="0,5,0,0" IsReadOnly="True" />
+
+        <!-- Authorization Panel -->
+        <StackPanel x:Name="authPanel" Orientation="Vertical" Margin="20" Width="300">
+            <TextBlock Text="Гость - Авторизация" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="Логин" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="guestLoginTextBox"/>
+            <TextBlock Text="Пароль" Foreground="White" Margin="0,10,0,0"/>
+            <PasswordBox x:Name="guestPasswordTextBox"/>
+            <Button x:Name="GuestAuthButton" Click="GuestAuthButton_Click" Content="Войти как гость" 
+                    Background="#4CAF50" Foreground="White" Margin="0,10,0,20" Width="200" Height="40"/>
+
+            <TextBlock Text="Администратор - Авторизация" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="Логин" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="adminLoginTextBox"/>
+            <TextBlock Text="Пароль" Foreground="White" Margin="0,10,0,0"/>
+            <PasswordBox x:Name="adminPasswordTextBox"/>
+            <Button x:Name="AdminAuthButton" Click="AdminAuthButton_Click" Content="Войти как администратор" 
+                    Background="#2196F3" Foreground="White" Margin="0,10,0,0" Width="200" Height="40"/>
+        </StackPanel>
+
+        <!-- Guest Panel -->
+        <StackPanel x:Name="guestPanel" Orientation="Vertical" Margin="20" Visibility="Collapsed" Width="400">
+            <TextBlock Text="Бронирование номера" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="Выберите номер" Foreground="White" Margin="0,10,0,0"/>
+            <ComboBox x:Name="roomComboBox">
+                <ComboBoxItem Content="Номер 101 - Одноместный стандарт" Tag="1"/>
+                <ComboBoxItem Content="Номер 201 - Бизнес" Tag="10"/>
+                <!-- Add more rooms as needed -->
+            </ComboBox>
+            <TextBlock Text="Дата заезда (гггг-мм-дд)" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="startDateTextBox"/>
+            <TextBlock Text="Дата выезда (гггг-мм-дд)" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="endDateTextBox"/>
+            <Button x:Name="BookRoomButton" Click="BookRoomButton_Click" Content="Забронировать" 
+                    Background="#4CAF50" Foreground="White" Margin="0,10,0,0" Width="200" Height="40"/>
+        </StackPanel>
+
+        <!-- Admin Panel -->
+        <StackPanel x:Name="adminPanel" Orientation="Vertical" Margin="20" Visibility="Collapsed" Width="400">
+            <TextBlock Text="Бронирование для гостя" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="Имя гостя" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="adminGuestTextBox"/>
+            <TextBlock Text="Выберите номер" Foreground="White" Margin="0,10,0,0"/>
+            <ComboBox x:Name="adminRoomComboBox">
+                <ComboBoxItem Content="Номер 101 - Одноместный стандарт" Tag="1"/>
+                <ComboBoxItem Content="Номер 201 - Бизнес" Tag="10"/>
+                <!-- Add more rooms as needed -->
+            </ComboBox>
+            <TextBlock Text="Дата заезда (гггг-мм-дд)" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="adminStartDateTextBox"/>
+            <TextBlock Text="Дата выезда (гггг-мм-дд)" Foreground="White" Margin="0,10,0,0"/>
+            <TextBox x:Name="adminEndDateTextBox"/>
+            <Button x:Name="AdminBookRoomButton" Click="AdminBookRoomButton_Click" Content="Забронировать для гостя" 
+                    Background="#2196F3" Foreground="White" Margin="0,10,0,20" Width="200" Height="40"/>
+
+            <TextBlock Text="Доступные номера" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <Button x:Name="ViewAvailableRoomsButton" Click="ViewAvailableRoomsButton_Click" 
+                    Content="Показать доступные номера" Background="#FF9800" Foreground="White" 
+                    Margin="0,10,0,10" Width="200" Height="40"/>
+            <DataGrid x:Name="availableRoomsDataGrid" AutoGenerateColumns="True" Height="200" 
+                      IsReadOnly="True"/>
         </StackPanel>
     </Grid>
 </Window>
